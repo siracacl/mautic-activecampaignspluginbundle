@@ -47,6 +47,11 @@ GET https://mautic-url.com/api/activecampaigns/1597
   }
 ]
 ```
+campaign_id is the Mautic ID of the campaign the contact is in.
+lead_id is the Mautic ID of the contact/lead itself.
+date_added is the date the contact was added to the corresponding campaign (should be in UTC).
+description is the campaign's description in Mautic.
+manually_removed should always be 0 as that is the filter applied to the endpoint (meaning, contact was NOT removed from said campaign ID).
 
 ## SQL Query
 
