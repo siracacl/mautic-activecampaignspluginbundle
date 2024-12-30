@@ -1,22 +1,33 @@
 # mautic-activecampaignspluginbundle
-Plugin to serve endpoint /activecampaigns with currently active campaign per contactId/lead_id.
+Plugin to serve endpoint `/activecampaigns` with currently active campaigns per `contactId`/`lead_id`.
 
 Tested with Mautic 5.2.1.
 
-# How to install?
+## How to install?
 
-Download /ActiveCampaignsPluginBundle folder and place it in the plugins directory of your Mautic installation.
+1. Download `/ActiveCampaignsPluginBundle` folder and place it in the `plugins` directory of your Mautic installation.
+2. Clear the cache of your Mautic installation.
+3. Go to the plugin settings in the Mautic web UI and click on "Update/Install" to detect the new plugin.
 
-Clear cache for Mautic installation. Might also need to go to plugin settings in Mautic web UI and click on update/install for the plugin to be found.
+## How to use?
 
-# How to use?
+Perform a `GET` request to:
 
-GET https://mautic-url.com/api/activecampaigns/{contact-id}
+```
+https://mautic-url.com/api/activecampaigns/{contact-id}
+```
 
-Returns array (without any attribute), like the following:
+This returns a JSON array (without any additional attributes), like the following:
 
+### Example Request
+
+```
 GET https://mautic-url.com/api/activecampaigns/1597
+```
 
+### Example Response
+
+```json
 [
   {
     "campaign_id": "4",
@@ -35,15 +46,18 @@ GET https://mautic-url.com/api/activecampaigns/1597
     "manually_removed": "0"
   }
 ]
+```
 
-Equals SQL-statement
+## SQL Query
 
-'
-            SELECT c.id AS campaign_id, c.name, cl.lead_id AS lead_id, cl.date_added, c.description, cl.manually_removed
-            FROM campaign_leads cl
-            INNER JOIN campaigns c ON cl.campaign_id = c.id
-            WHERE cl.lead_id = :contactId
-              AND c.is_published = 1
-              AND cl.date_last_exited IS NULL
-              AND cl.manually_removed = 0
-        '
+The plugin executes the following SQL query:
+
+```sql
+SELECT c.id AS campaign_id, c.name, cl.lead_id AS lead_id, cl.date_added, c.description, cl.manually_removed
+FROM campaign_leads cl
+INNER JOIN campaigns c ON cl.campaign_id = c.id
+WHERE cl.lead_id = :contactId
+  AND c.is_published = 1
+  AND cl.date_last_exited IS NULL
+  AND cl.manually_removed = 0
+```
