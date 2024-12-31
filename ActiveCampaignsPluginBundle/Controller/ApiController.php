@@ -21,6 +21,7 @@ class ApiController extends CommonApiController
               AND c.is_published = 1
               AND cl.date_last_exited IS NULL
               AND cl.manually_removed = 0
+              AND c.description NOT LIKE '%system%'
         ';
 
         // query
