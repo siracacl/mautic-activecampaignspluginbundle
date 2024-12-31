@@ -14,14 +14,14 @@ class ApiController extends CommonApiController
 
         // sql query
         $sql = '
-            SELECT c.id AS campaign_id, c.name, cl.lead_id AS lead_id, cl.date_added, c.description, cl.manually_removed
-            FROM campaign_leads cl
-            INNER JOIN campaigns c ON cl.campaign_id = c.id
-            WHERE cl.lead_id = :contactId
-              AND c.is_published = 1
-              AND cl.date_last_exited IS NULL
-              AND cl.manually_removed = 0
-              AND c.description NOT LIKE "%system%"
+        SELECT c.id AS campaign_id, c.name, c.category_id AS campaign_category, cl.lead_id AS lead_id, cl.date_added, c.description, cl.manually_removed
+        FROM campaign_leads cl
+        INNER JOIN campaigns c ON cl.campaign_id = c.id
+        WHERE cl.lead_id = :contactId
+          AND c.is_published = 1
+          AND cl.date_last_exited IS NULL
+          AND cl.manually_removed = 0
+          AND (c.category_id <> 4 OR c.category_id IS NULL)
         ';
 
         // query
